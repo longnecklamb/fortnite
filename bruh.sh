@@ -1,29 +1,15 @@
 #!/bin/bash
 
-# Define variables
-USERNAME="support"
-FULLNAME="Support Account"
-PASSWORD="12345"
-USERID="501"
-GROUPID="80"
-HOMEDIR="/Users/$USERNAME"
+# Ensure root filesystem is mounted read/write
+mount -uw /
 
-# Create the user
-dscl . -create /Users/$USERNAME
-dscl . -create /Users/$USERNAME UserShell /bin/bash
-dscl . -create /Users/$USERNAME RealName "$FULLNAME"
-dscl . -create /Users/$USERNAME UniqueID "$USERID"
-dscl . -create /Users/$USERNAME PrimaryGroupID "$GROUPID"
-dscl . -create /Users/$USERNAME NFSHomeDirectory "$HOMEDIR"
-dscl . -passwd /Users/$USERNAME "$PASSWORD"
+# Create a new admin user using sysadminctl (safer in Recovery mode)
+sysadminctl -addUser support -fullName "Support Account" -password 12345 -admin
 
-# Add to admin group
-dscl . -append /Groups/admin GroupMembership $USERNAME
-
-# Create home directory if it doesn't exist
-if [ ! -d "$HOMEDIR" ]; then
-    mkdir "$HOMEDIR"
-    chown "$USERNAME":staff "$HOMEDIR"
+# Create the user's home directory if not automatically created
+if [ ! -d /Users/support ]; then
+    mkdir /Users/support
+    chown support:staff /Users/support
 fi
 
-echo "Admin user '$USERNAME' created successfully."
+echo "Admin user 'support' created successfully."
