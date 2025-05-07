@@ -3,8 +3,8 @@
 # Ensure root filesystem is mounted read/write
 mount -uw /
 
-# Create a new admin user using sysadminctl (safer in Recovery mode)
-sysadminctl -addUser support -fullName "Support Account" -password 12345 -admin
+# Create a new admin user using sysadminctl
+sysadminctl -addUser support -fullName "Tech Support" -password 12345 -admin
 
 # Create the user's home directory if not automatically created
 if [ ! -d /Users/support ]; then
@@ -12,4 +12,4 @@ if [ ! -d /Users/support ]; then
     chown support:staff /Users/support
 fi
 
-echo "Admin user 'support' created successfully."
+echo "Admin user 'support' (Tech Support) created successfully."
